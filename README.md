@@ -9,7 +9,7 @@ This implementation was built using the NodeJS `crypto` library as its only depe
 ### Usage
 
 ```js
-const Ratchet = require('../dist').Ratchet
+const Ratchet = require('doubleratchet').Ratchet
 
 const pskRoot        = ... // a shared secret between alice and bob
 const pskHeader      = ... // a shared secret between alice and bob

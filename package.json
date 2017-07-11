@@ -1,10 +1,13 @@
 {
   "name": "doubleratchet",
-  "version": "0.0.1",
-  "description": "An Implementation of The Double Ratchet Algorithm",
+  "version": "0.0.2",
+  "description": "An Implementation of The Double Ratchet Algorithm designed by Open Whisper Systems",
   "main": "dist/index.js",
+  "url": "https://github.com/jowy/doubleratchet/issues",
+  "email": "joseph@fermi.io",
   "scripts": {
-    "build": "babel --out-dir dist src"
+    "build": "babel --out-dir dist src",
+    "prepublish": "npm run build"
   },
   "keywords": [
     "double",
@@ -21,5 +24,9 @@
     "babel-cli": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jowy/doubleratchet.git"
   }
 }
