@@ -1,0 +1,25 @@
+{
+  "name": "doubleratchet",
+  "version": "0.0.1",
+  "description": "An Implementation of The Double Ratchet Algorithm",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "babel --out-dir dist src"
+  },
+  "keywords": [
+    "double",
+    "ratchet",
+    "crypto",
+    "messaging",
+    "open",
+    "whisper",
+    "systems"
+  ],
+  "author": "Joseph Pugh",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1"
+  }
+}
