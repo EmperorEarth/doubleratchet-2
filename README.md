@@ -48,4 +48,16 @@ See `examples` directory for more.
 
 ### TODO
 
-- write todo (there are a handful of things)
+- flow typing
+- comments
+- tests
+- clean up (H)KDF flow
+- clean up `Key` and `CipherKey` initialization and handling
+- clean up buffer handling
+- state (de)serialization
+- fix header & nextHeader initialization and flow
+- proper handling of input & output encoding
+- revise `CipherKey` kdf
+- error handling for various things
+- rollback chain state on failure
+- more examples demonstrating
