@@ -56,6 +56,22 @@ export default class ReceivingChain extends AbstractChain {
       authenticationTag,
     } = this.deserialize(payload)
 
+    if (!headerCipherText) {
+      throw new Error('Unable to decrypt message header. Invalid ciphertext.')
+    }
+
+    if (!cipherText) {
+      throw new Error('Unable to decrypt message. Invalid ciphertext.')
+    }
+
+    if (!authenticationTag) {
+      throw new Error('Unable to authenticate message: Missing authentication tag.')
+    }
+
+    if (authenticationTag.length !== AUTHENTICATION_TAG_LENGTH) {
+      throw new Error('Unable to authenticate message: Authentication tag length mismatch.')
+    }
+
     const plainText = this.trySkipped(cipherText, headerCipherText, authenticationTag)
 
     if (plainText !== false) {
@@ -65,7 +81,7 @@ export default class ReceivingChain extends AbstractChain {
     const header = this.decryptHeader(headerCipherText)
 
     if (header === false) {
-      return false
+      throw new Error('Unable to decrypt message header.')
     }
 
     const {
@@ -89,7 +105,7 @@ export default class ReceivingChain extends AbstractChain {
     this.skip(skipAfter)
 
     if (!this.validAuthenticationTag(authenticationTag, headerCipherText, cipherText, this.messageKey.auth)) {
-      return false
+      throw new Error('Unable to authenticate message: Invalid authentication tag.')
     }
 
     const output = this._decrypt(cipherText, this.messageKey)
@@ -100,7 +116,7 @@ export default class ReceivingChain extends AbstractChain {
       return output
     }
 
-    return false
+    throw new Error('Unable to decrypt message.')
   }
 
   deserialize(data) {
