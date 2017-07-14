@@ -8,12 +8,24 @@ const preSharedKey__nextHeader  = new Buffer('030061d5eb6946be4a77', 'hex')
 const alice = new Ratchet(preSharedKey__ROOT, preSharedKey__header, preSharedKey__nextHeader)
 const bob = new Ratchet(preSharedKey__ROOT, preSharedKey__nextHeader, preSharedKey__header)
 
-// handshake sent over public channel
-const bobHandshake = bob.makeHandshake()
+alice.setSendingExtraAuthenticationData([ 'username_bob' ])
+alice.setReceivingExtraAuthenticationData([ 'username_alice' ])
 
-alice.acceptHandshake(bobHandshake)
+bob.setSendingExtraAuthenticationData([ 'username_alice' ])
+bob.setReceivingExtraAuthenticationData([ 'username_bob' ])
+
+alice.acceptHandshake(bob.makeHandshake())
 
 // initial message
 console.log( bob.decrypt(alice.encrypt("ping")) )
 
 console.log( alice.decrypt(bob.encrypt("pong")) )
+
+bob.setSendingExtraAuthenticationData([ 'username_eve' ])
+
+try {
+  console.log( bob.decrypt(alice.encrypt("ping")) )
+  console.log( alice.decrypt(bob.encrypt("pong")) )
+} catch (e) {
+  console.log('unable to decrypt')
+}
