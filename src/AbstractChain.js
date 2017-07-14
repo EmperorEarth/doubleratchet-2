@@ -34,8 +34,8 @@ export default class AbstractChain {
     hkdf(this.keys.chain, this.keys.chain, [ this.keys.message ])
   }
 
-  makeAuthenticationTag(header, cipherText, authKey = this.messageKey.auth) {
-    return hmac(authKey, concatBuffers([ header, cipherText ])).slice(0, AUTHENTICATION_TAG_LENGTH)
+  makeAuthenticationTag(elements, authKey = this.messageKey.auth) {
+    return hmac(authKey, concatBuffers(elements)).slice(0, AUTHENTICATION_TAG_LENGTH)
   }
 
   step() {

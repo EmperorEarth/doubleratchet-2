@@ -23,13 +23,12 @@ export default class SendingChain extends AbstractChain {
 
     const header = this.makeHeader()
 
-    const authenticationTag = this.makeAuthenticationTag(header, cipherText)
+    const authenticationTag = this.makeAuthenticationTag([ header.cipherText, cipherText ])
 
     this.step()
 
     return concatBuffers([
-      header,
-      this.ratchet.keys.ratchet.public,
+      header.payload,
       authenticationTag,
       cipherText,
     ])
@@ -38,14 +37,25 @@ export default class SendingChain extends AbstractChain {
   makeHeader() {
     const cipher = crypto.createCipheriv(ALGO_CIPHER, this.headerKey.content, this.headerKey.iv)
 
-    const header = Buffer.allocUnsafe(4)
+    const header = new Buffer(4 + this.ratchet.keys.ratchet.public.length)
+
     header.writeInt16LE(this.count, 0)
     header.writeInt16LE(this.previous, 2)
+    this.ratchet.keys.ratchet.public.copy(header, 4)
 
-    return concatBuffers([
+    const cipherText = concatBuffers([
       cipher.update(header),
       cipher.final(),
     ])
+
+    const payload = new Buffer(2 + cipherText.length)
+    payload.writeInt16LE(cipherText.length, 0)
+    cipherText.copy(payload, 2)
+
+    return {
+      cipherText,
+      payload
+    }
   }
 
 }

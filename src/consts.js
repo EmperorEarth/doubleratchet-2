@@ -1,6 +1,4 @@
 export const ALGO_ECDH_CURVE              = 'secp521r1'
-export const RATCHET_KEY_LENGTH           = 133
-export const HEADER_LENGTH                = 16
 
 export const ALGO_CIPHER                  = 'aes-256-cbc'
 export const ALGO_HKDF_HMAC               = 'sha256'

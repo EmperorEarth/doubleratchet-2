@@ -5,8 +5,6 @@ import CipherKey from './CipherKey'
 
 import {
   ALGO_CIPHER,
-  RATCHET_KEY_LENGTH,
-  HEADER_LENGTH,
   AUTHENTICATION_TAG_LENGTH,
   MESSAGE_KEY_TTL,
 } from './consts'
@@ -45,6 +43,7 @@ export default class ReceivingChain extends AbstractChain {
       return {
         count:         output.readInt16LE(0),
         previous:      output.readInt16LE(2),
+        ratchetKey:    output.slice(4),
       }
     }
     return false
@@ -53,7 +52,6 @@ export default class ReceivingChain extends AbstractChain {
   decrypt(payload) {
     const {
       headerCipherText,
-      ratchetKey,
       cipherText,
       authenticationTag,
     } = this.deserialize(payload)
@@ -74,6 +72,7 @@ export default class ReceivingChain extends AbstractChain {
       count,
       previous,
       usedNext,
+      ratchetKey,
     } = header
 
     let skipAfter = 0
@@ -106,11 +105,11 @@ export default class ReceivingChain extends AbstractChain {
   deserialize(data) {
     let offset = 0
 
-    const headerCipherText = data.slice(offset, offset + HEADER_LENGTH)
-    offset += HEADER_LENGTH
+    const headerLength = data.readInt16LE(0)
+    offset += 2
 
-    const ratchetKey = data.slice(offset, offset + RATCHET_KEY_LENGTH)
-    offset += RATCHET_KEY_LENGTH
+    const headerCipherText = data.slice(offset, offset + headerLength)
+    offset += headerLength
 
     const authenticationTag = data.slice(offset, offset + AUTHENTICATION_TAG_LENGTH)
     offset += AUTHENTICATION_TAG_LENGTH
@@ -119,7 +118,6 @@ export default class ReceivingChain extends AbstractChain {
 
     return {
       headerCipherText,
-      ratchetKey,
       cipherText,
       authenticationTag,
     }
@@ -164,7 +162,7 @@ export default class ReceivingChain extends AbstractChain {
   }
 
   validAuthenticationTag(authenticationTag, headerCipherText, cipherText, authenticationKey) {
-    return compare(authenticationTag, this.makeAuthenticationTag(headerCipherText, cipherText, authenticationKey))
+    return compare(authenticationTag, this.makeAuthenticationTag([headerCipherText, cipherText], authenticationKey))
   }
 
   _decrypt(data, key) {
@@ -182,7 +180,7 @@ export default class ReceivingChain extends AbstractChain {
   getState() {
     return {
       skipped: this.skipped,
-      ...this.getCoreState()
+      ...super.getState()
     }
   }
 
