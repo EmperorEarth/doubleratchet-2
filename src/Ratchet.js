@@ -67,6 +67,14 @@ export default class Ratchet {
     )
   }
 
+  setSendingExtraAuthenticationData(data) {
+    this.chains.sending.extraAuthenticationData = data.map(item => (new Buffer(item)))
+  }
+
+  setReceivingExtraAuthenticationData(data) {
+    this.chains.receiving.extraAuthenticationData = data.map(item => (new Buffer(item)))
+  }
+
   encrypt(data) {
     return this.chains.sending.encrypt(data)
   }

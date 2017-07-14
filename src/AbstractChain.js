@@ -26,6 +26,7 @@ export default class AbstractChain {
       header:     new CipherKey(headerKey, null, null, HKDF_KEY_TYPE_HEADER),
       nextHeader: new CipherKey(nextHeaderKey, null, null, HKDF_KEY_TYPE_HEADER),
     }
+    this.extraAuthenticationData = []
     this.count = 0
     this.previous = 0
   }
@@ -35,7 +36,7 @@ export default class AbstractChain {
   }
 
   makeAuthenticationTag(elements, authKey = this.messageKey.auth) {
-    return hmac(authKey, concatBuffers(elements)).slice(0, AUTHENTICATION_TAG_LENGTH)
+    return hmac(authKey, concatBuffers(elements.concat(this.extraAuthenticationData))).slice(0, AUTHENTICATION_TAG_LENGTH)
   }
 
   step() {
