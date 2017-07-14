@@ -36,8 +36,7 @@ export default class Ratchet {
     this.keys.ratchet.private = this.curve.getPrivateKey()
     this.chains.sending.keys.nextHeader = new CipherKey(this.chains.sending.keys.header)
 
-    hkdf(this.keys.root, this.chains.receiving.nextHeaderKey, [ this.chains.receiving.nextHeaderKey ])
-    hkdf(new Key(this.keys.root), this.chains.receiving.nextHeaderKey, [ this.chains.sending.nextHeaderKey ])
+    hkdf(this.keys.root, this.keys.root, [ this.chains.receiving.nextHeaderKey, this.chains.sending.nextHeaderKey ])
 
     return this.keys.ratchet.public
   }
@@ -48,11 +47,8 @@ export default class Ratchet {
 
     let secret = this.curve.computeSecret(key)
 
-    hkdf(this.keys.root, this.chains.sending.headerKey, [ this.chains.sending.headerKey ])
-    hkdf(new Key(this.keys.root), this.chains.sending.headerKey, [ this.chains.receiving.nextHeaderKey ])
+    hkdf(this.keys.root, this.keys.root, [ this.chains.sending.headerKey, this.chains.receiving.nextHeaderKey ])
     hkdf(this.keys.root, secret, [ this.chains.sending.chainKey, this.chains.sending.nextHeaderKey ])
-
-    this.chains.sending.stepHkdf()
   }
 
   ratchet(key = null) {
@@ -63,10 +59,6 @@ export default class Ratchet {
       [ this.chains.receiving.chainKey, this.chains.receiving.nextHeaderKey ]
     )
 
-    if (this.chains.receiving.messageKeyBuffer.length === 0) {
-      this.chains.receiving.stepHkdf()
-    }
-
     this.keys.ratchet.public = this.curve.generateKeys()
     this.keys.ratchet.private = this.curve.getPrivateKey()
 
@@ -76,10 +68,6 @@ export default class Ratchet {
       this.curve.computeSecret(key),
       [ this.chains.sending.chainKey, this.chains.sending.nextHeaderKey ]
     )
-
-    if (this.chains.sending.messageKeyBuffer.length === 0) {
-      this.chains.sending.stepHkdf()
-    }
   }
 
   encrypt(data) {

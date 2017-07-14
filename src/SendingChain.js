@@ -14,6 +14,8 @@ import {
 export default class SendingChain extends AbstractChain {
 
   encrypt(data) {
+    this.step()
+
     const cipher = crypto.createCipheriv(ALGO_CIPHER, this.messageKey.content, this.messageKey.iv)
 
     const cipherText = concatBuffers([
@@ -24,8 +26,6 @@ export default class SendingChain extends AbstractChain {
     const header = this.makeHeader()
 
     const authenticationTag = this.makeAuthenticationTag([ header.cipherText, cipherText ])
-
-    this.step()
 
     return concatBuffers([
       header.payload,
