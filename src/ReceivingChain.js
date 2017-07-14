@@ -24,14 +24,27 @@ export default class ReceivingChain extends AbstractChain {
   }
 
   decryptHeader(cipherText) {
-    for (let headerKey of this.getHeaderKeys()) {
-      const output = this._decrypt(cipherText, headerKey)
-      if (output !== false) {
-        return {
-          count:         output.readInt16LE(0),
-          previous:      output.readInt16LE(2),
-          usedNext:      compare(this.nextHeaderKey.content, headerKey.content),
-        }
+    if (this.headerKey) {
+      const header = this._decryptHeader(cipherText, this.headerKey)
+      if (header !== false) {
+        return header
+      }
+    }
+    if (this.nextHeaderKey) {
+      const header = this._decryptHeader(cipherText, this.nextHeaderKey)
+      if (header !== false) {
+        return { ...header, usedNext: true }
+      }
+    }
+    return false
+  }
+
+  _decryptHeader(cipherText, headerKey) {
+    const output = this._decrypt(cipherText, headerKey)
+    if (output !== false) {
+      return {
+        count:         output.readInt16LE(0),
+        previous:      output.readInt16LE(2),
       }
     }
     return false
@@ -164,10 +177,6 @@ export default class ReceivingChain extends AbstractChain {
     } catch (e) {
       return false
     }
-  }
-
-  getHeaderKeys() {
-    return this.skipped.map(skippedKey => skippedKey.header).concat([ this.headerKey, this.nextHeaderKey ])
   }
 
   getState() {
