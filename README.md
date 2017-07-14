@@ -1,6 +1,6 @@
 # DoubleRatchet
 
-This is a mostly complete implementation of [The Double Ratchet Algorithm](https://whispersystems.org/docs/specifications/doubleratchet/#ref-rfc2315) designed by [Open Whisper Systems](https://whispersystems.org).
+This is a mostly complete implementation of the Encrypted Header variant of the [The Double Ratchet Algorithm](https://whispersystems.org/docs/specifications/doubleratchet/#ref-rfc2315) designed by [Open Whisper Systems](https://whispersystems.org).
 
 **WARNING:** This implementation was created for learning purposes and should not be used outside of a development environment. Any concerns or suggestions are **very** welcome.
 
@@ -26,12 +26,20 @@ alice.decrypt( bob.encrypt('hello alice') ) // "hello alice"
 
 See `examples` directory for more.
 
+### Development
+```
+git clone https://github.com/jowy/doubleratchet.git
+cd doubleratchet 
+yarn install
+yarn build
+```
+
 ### Implementation Parameters
 
 | Parameter | Implementation |
 | -------- | -------- |
 | Ratchet ECDH Curve | `secp521r1` |
-| HMAC-KDF (HKDF) | SHA512 |
+| HMAC-KDF (HKDF) | SHA256 |
 | Header Cipher | AES256 CBC Mode |
 | Header Key Derivation | Salted HKDF |
 | Header Key Length | 32 Bytes (Truncated) |
@@ -60,4 +68,4 @@ See `examples` directory for more.
 - revise `CipherKey` kdf
 - error handling for various things
 - rollback chain state on failure
-- more examples demonstrating
+- more examples demonstrating various features of the protocol
