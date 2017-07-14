@@ -3,7 +3,7 @@ export const RATCHET_KEY_LENGTH           = 133
 export const HEADER_LENGTH                = 16
 
 export const ALGO_CIPHER                  = 'aes-256-cbc'
-export const ALGO_HKDF_HMAC               = 'sha512'
+export const ALGO_HKDF_HMAC               = 'sha256'
 
 export const HKDF_KEY_TYPE_CHAIN          = 'KEY_TYPE_CHAIN'
 export const HKDF_KEY_TYPE_MESSAGE        = 'KEY_TYPE_MESSAGE'
