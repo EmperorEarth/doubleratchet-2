@@ -29,7 +29,7 @@ See `examples` directory for more.
 ### Development
 ```
 git clone https://github.com/jowy/doubleratchet.git
-cd doubleratchet 
+cd doubleratchet
 yarn install
 yarn build
 ```
@@ -59,13 +59,15 @@ yarn build
 - flow typing
 - comments
 - tests
-- clean up (H)KDF flow
+- clean up KDF flow
 - clean up `Key` and `CipherKey` initialization and handling
 - clean up buffer handling
 - state (de)serialization
-- fix header & nextHeader initialization and flow
+- ~~fix header & nextHeader initialization and flow~~
 - proper handling of input & output encoding
 - revise `CipherKey` kdf
 - error handling for various things
+- throw properly typed errors
 - rollback chain state on failure
-- more examples demonstrating various features of the protocol
+- ~~more examples demonstrating various features of the protocol~~
+- API outline
