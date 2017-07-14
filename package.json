@@ -1,6 +1,6 @@
 {
   "name": "doubleratchet",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "An Implementation of The Double Ratchet Algorithm designed by Open Whisper Systems",
   "main": "dist/index.js",
   "url": "https://github.com/jowy/doubleratchet/issues",
