@@ -27,6 +27,8 @@ export default class SendingChain extends AbstractChain {
 
     const authenticationTag = this.makeAuthenticationTag([ header.cipherText, cipherText ])
 
+    this.messageKey.nullify()
+
     return concatBuffers([
       header.payload,
       authenticationTag,

@@ -17,4 +17,10 @@ export default class CipherKey extends Key {
     }
   }
 
+  nullify() {
+    super.nullify()
+    this.iv = null
+    this.auth = null
+  }
+
 }

@@ -11,4 +11,8 @@ export default class Key {
     }
   }
 
+  nullify() {
+    this.content = null
+  }
+
 }

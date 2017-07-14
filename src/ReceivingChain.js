@@ -95,6 +95,7 @@ export default class ReceivingChain extends AbstractChain {
     const output = this._decrypt(cipherText, this.messageKey)
 
     if (output !== false) {
+      this.messageKey.nullify()
       this.step()
       return output
     }
@@ -155,6 +156,8 @@ export default class ReceivingChain extends AbstractChain {
       if (output === false) {
         continue
       }
+      this.skipped[i].message.nullify()
+      this.skipped[i].header.nullify()
       this.skipped.splice(i, 1)
       return output
     }
