@@ -21,8 +21,7 @@ export default class Ratchet {
     this.keys = {
       root: new Key(rootKey, HKDF_KEY_TYPE_ROOT),
       ratchet: {
-        public:   null,
-        private:  null,
+        public: null,
       },
     }
     this.chains = {
@@ -33,7 +32,7 @@ export default class Ratchet {
 
   makeHandshake() {
     this.keys.ratchet.public = this.curve.generateKeys()
-    this.keys.ratchet.private = this.curve.getPrivateKey()
+
     this.chains.sending.keys.nextHeader = new CipherKey(this.chains.sending.keys.header)
 
     hkdf(this.keys.root, this.keys.root, [ this.chains.receiving.nextHeaderKey, this.chains.sending.nextHeaderKey ])
@@ -43,7 +42,6 @@ export default class Ratchet {
 
   acceptHandshake(key) {
     this.keys.ratchet.public = this.curve.generateKeys()
-    this.keys.ratchet.private = this.curve.getPrivateKey()
 
     let secret = this.curve.computeSecret(key)
 
@@ -60,7 +58,6 @@ export default class Ratchet {
     )
 
     this.keys.ratchet.public = this.curve.generateKeys()
-    this.keys.ratchet.private = this.curve.getPrivateKey()
 
     this.chains.sending.reset()
 
@@ -85,7 +82,7 @@ export default class Ratchet {
     }
     return buffer.toString()
   }
-  
+
   getState() {
     return {
       receiving:  this.chains.receiving.getState(),
