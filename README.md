@@ -1,3 +1,6 @@
+# Warning: this project is no longer in development
+### After tons of crypto research, I've decided to kill this project and start fresh
+
 # DoubleRatchet
 
 This is a mostly complete implementation of the Encrypted Header variant of the [The Double Ratchet Algorithm](https://whispersystems.org/docs/specifications/doubleratchet/#ref-rfc2315) designed by [Open Whisper Systems](https://whispersystems.org).
